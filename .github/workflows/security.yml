@@ -1,0 +1,27 @@
+name: Security Scan (SonarQube)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  security_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up SonarQube Scanner
+        uses: sonarsource/sonarqube-scan-action@v1.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: "https://sonarcloud.io"  # Replace with your SonarQube server URL if using a self-hosted instance
+          
+      - name: Run SonarQube Analysis
+        run: |
+          echo "Running SonarQube scan"
+          sonar-scanner
